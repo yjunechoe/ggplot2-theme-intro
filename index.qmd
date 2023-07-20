@@ -1,15 +1,6 @@
 ---
 title: "Introduction to ggplot2 <code>theme()</code>"
-author: |
-  <p class="author" style="font-size: 1.1em; margin-top:60px">
-    June Choe
-  </p>
-  <p style="font-size:.9em">
-    University of Pennsylvania
-  </p>
-  <p style="font-size:.8em">
-    7/21/2023
-  </p>
+author: "June Choe"
 format:
   revealjs:
     include-in-header: "meta.html"
