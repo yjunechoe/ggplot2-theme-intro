@@ -1,0 +1,502 @@
+---
+title: "Introduction to ggplot2 <code>theme()</code>"
+format:
+  revealjs:
+    theme: [default, styles.scss]
+    code-line-numbers: false
+    code-link: true
+    footer: "yjunechoe.github.io/ggplot2-theme-intro"
+editor: visual
+fig-format: svg
+execute:
+  cache: true
+knitr:
+  opts_chunk:
+    echo: true
+    message: false
+    dev: "svglite"
+    dev.args:
+      scaling: 2.5
+---
+
+## Overview
+
+This is a short(!) introduction to the design principles of theme, to help you:
+
+- Get a feel for *what parts* of the plot can be modified *how*
+
+- Develop a **vocabulary** for specific components of a plot
+
+- Explore theme **extensions** developed by the community
+
+<br>
+
+Slides: [yjunechoe.github.io/ggplot2-theme-intro](https://yjunechoe.github.io/ggplot2-theme-intro)
+
+
+## What is **Theme** in ggplot?
+
+Broadly, it's the **style** of your plot. But more technically, **Theme** refers to styles that are **_not_ mapped from the data**
+
+. . .
+
+Is a **Theme**:
+
+- The font of the plot's title
+
+- The color of the x-axis line
+
+. . .
+
+Is NOT a **Theme**:
+
+- The fill of the rectangles in `geom_bar()`
+
+- The size of the text in `geom_label()`
+
+
+## Data
+
+```{r}
+#| label: yeah-mhm-data
+#| message: false
+library(tidyverse)
+yeah_mhm <- read_csv("yeah_mhm-small.csv")
+yeah_mhm
+```
+
+## Plot
+
+```{r}
+#| label: base-plot
+bar_plot <- ggplot(yeah_mhm, aes(x = stanceType)) +
+  geom_bar(aes(fill = textLower))
+bar_plot
+```
+
+## **Theme** in code
+
+"Color the x-axis line red":
+
+. . .
+
+```{r}
+#| label: x-axis-red
+bar_plot +
+  theme(axis.line.x = element_line(color = "red"))
+```
+
+## The structure of `theme()`
+
+`theme( COMPONENT = STYLE )`{.center style="font-size:1.5em; margin: 50px auto;"}
+
+"The **x-axis line** should be a **red colored line**":
+
+::: {.indent-1}
+```{r}
+#| label: theme-x-axis-red
+#| eval: false
+theme(axis.line.x = element_line(color = "red"))
+```
+:::
+
+. . .
+
+<br>
+
+**Components** are hierarchically organized pieces of a plot
+
+**Styles** are values specifying the appearance of a component
+
+- Often as `element_line()`, `element_rect()`, `element_text()`, ...
+
+## Theme _families_ {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+`theme()` has lots of options, but not that scary to navigate!
+
+Theme elements are organized hierarchically:
+
+```{r}
+#| label: axis-line-family
+#| eval: false
+theme(
+  axis.line,
+  axis.line.x,
+  axis.line.x.top,
+  axis.line.x.bottom,
+  axis.line.y,
+  axis.line.y.left,
+  axis.line.y.right,
+)
+```
+
+## Theme _families_ {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+`theme()` has lots of options, but not that scary to navigate!
+
+Theme elements are organized hierarchically:
+
+```{r}
+#| label: axis-line-family-indented
+#| eval: false
+theme(
+  axis.line,
+    axis.line.x,
+      axis.line.x.top,
+      axis.line.x.bottom,
+    axis.line.y,
+      axis.line.y.left,
+      axis.line.y.right,
+)
+```
+
+Styles are inherited if left unspecified
+
+## Theme _inheritance_: axis line
+
+"X-axis line is red"
+
+```{r}
+#| label: x-axis-red
+```
+
+## Theme _inheritance_: axis line
+
+"Axis lines are thick, x-axis line is red"
+
+```{r}
+#| label: axis-line-2
+bar_plot +
+  theme(
+    axis.line   = element_line(linewidth = 2),
+    axis.line.x = element_line(color = "red")
+  )
+```
+
+## Theme _inheritance_: axis title
+
+```{r}
+#| label: axis-title-family-indented
+#| eval: false
+theme(
+  axis.title,
+    axis.title.x,
+      axis.title.x.top,
+      axis.title.x.bottom,
+    axis.title.y,
+      axis.title.y.left,
+      axis.title.y.right,
+)
+```
+
+## Theme _inheritance_: axis title
+
+"Axis titles are big"
+
+```{r}
+#| label: axis-title-1
+bar_plot +
+  theme(
+    axis.title = element_text(size = 20)
+  )
+```
+
+## Theme _inheritance_: axis title
+
+"Axis titles are big, x-axis title is blue"
+
+```{r}
+#| label: axis-title-2
+bar_plot +
+  theme(
+    axis.title   = element_text(size = 20),
+    axis.title.x = element_text(color = "blue")
+  )
+```
+
+## Theme _inheritance_: axis title
+
+"Text is in italics, axis titles are big, x-axis title is blue"
+
+```{r}
+#| label: axis-title-3
+bar_plot +
+  theme(
+    text         = element_text(face = "italic"),
+    axis.title   = element_text(size = 20),
+    axis.title.x = element_text(color = "blue")
+  )
+```
+
+## Styles with `element_*()`
+
+Now we have some questions...
+
+. . .
+
+What are the options for different element functions?
+
+```{r}
+?element_text()
+```
+
+. . .
+
+Which `element_*()` should I use? Check the docs!
+
+```{r}
+?theme()
+```
+
+. . .
+
+How can we modify the legend background, for example?
+
+```{r}
+#| eval: false
+theme(... = ...)
+```
+
+## Theme practice: legend background
+
+`legend.background` takes an `element_rect()` and we have the following options available:
+
+```{r}
+#| label: element-rect-args
+#| eval: false
+args(element_rect)
+```
+
+```{r}
+#| label: element-rect-args-show
+#| echo: false
+cat("function (fill = NULL, colour = NULL, linewidth = NULL, linetype = NULL, 
+          color = NULL, inherit.blank = FALSE, size = deprecated())")
+```
+
+. . .
+
+The options are similar to **aesthetics** in geom layers:
+
+- `fill`: Rectangle fill color
+- `color`/`colour`: Outline color
+- `linetype`: Outline line type
+- `linewidth`: Outline line thickness
+
+## Theme practice: legend background
+
+```{r}
+#| label: legend-background-red
+bar_plot +
+  theme(legend.background = element_rect(fill = "red", color = "blue"))
+```
+
+## Styles with specific choices
+
+But not all aspects of the plot are about the _appearance_ of an element:
+
+- `aspect.ratio`: The aspect ratio of a plot
+- `legend.position`: The positioning of plot legend
+- `title.position`: The positioning of plot title
+- `plot.margin`: Margins (padding) around the plot
+
+These are exceptions that don't take `element_*()` specifications.
+
+- What does the documentation say about `legend.position`?
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-1
+bar_plot +
+  theme(legend.position = "none")
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-2
+bar_plot +
+  theme(legend.position = "top")
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-3
+bar_plot +
+  theme(legend.position = "right")
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-4
+bar_plot +
+  theme(legend.position = "bottom")
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-5
+bar_plot +
+  theme(legend.position = "left")
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-6
+bar_plot +
+  theme(legend.position = c(.5, .5))
+```
+
+## Theme practice: legend position
+
+```{r}
+#| label: legend-pos-7
+bar_plot +
+  theme(legend.position = c(.2, .8))
+```
+
+## Interim summary
+
+What we've seen so far:
+
+- You specify the style of specific components of your plot using `theme()`
+- Themes are hierarchical, and nesting is shown by the `"."` in the argument name
+- For the most part, styles are specified using `element_*()` functions
+- _Always_ consult the documentation! [https://ggplot2.tidyverse.org/reference/theme.html](https://ggplot2.tidyverse.org/reference/theme.html)
+
+## Last few minutes
+
+I want to quickly showcase some:
+
+- Complete themes
+
+- Theme extensions
+
+- Additional resources
+
+## Complete themes
+
+```{r}
+#| label: theme-default
+bar_plot
+```
+
+## Complete themes
+
+```{r}
+#| label: theme-minimal
+bar_plot +
+  theme_minimal()
+```
+
+## Complete themes
+
+```{r}
+#| label: theme-classic
+bar_plot +
+  theme_classic()
+```
+
+## Complete themes
+
+```{r}
+#| label: theme-grey
+bar_plot +
+  theme_grey() # Default
+```
+
+## Complete themes
+
+Additional feature: scaling with `base_size`
+
+```{r}
+#| label: theme-base_size-1
+bar_plot +
+  theme_classic(base_size = 5)
+```
+
+## Complete themes
+
+Additional feature: scaling with `base_size`
+
+```{r}
+#| label: theme-base_size-2
+bar_plot +
+  theme_classic(base_size = 15)
+```
+
+## Theme extensions
+
+Theme extensions (mostly) come in one of two forms:
+
+- Custom **complete themes**
+
+- Custom theme `element_*()`s
+
+. . .
+
+You can search for ggplot2 theme extensions like you would any other ggplot2 extension package:
+
+- Ex: [https://exts.ggplot2.tidyverse.org/gallery/](https://exts.ggplot2.tidyverse.org/gallery/)
+
+## Complete theme extensions
+
+```{r}
+#| label: complete-themes-1
+library(ggthemes)
+bar_plot +
+  theme_excel()
+```
+
+## Complete theme extensions
+
+```{r}
+#| label: complete-themes-2
+library(ggthemes)
+bar_plot +
+  theme_wsj()
+```
+
+## Modify on top of complete themes
+
+```{r}
+#| label: complete-themes-3
+library(ggthemes)
+bar_plot +
+  theme_wsj(base_size = 10) +
+  theme(legend.title = element_blank()) # can substitute any element
+```
+
+## Theme `element_*()` extensions
+
+```{r}
+#| label: custom-theme-element
+#| eval: false
+library(elementalist) # devtools::install_github("teunbrand/elementalist")
+bar_plot +
+  theme(axis.line.x = element_line_wiggle(color = "red", amount = 5),
+        legend.background = element_rect_wiggle(color = "black"))
+```
+
+## Theme `element_*()` extensions
+
+```{r}
+#| label: custom-theme-element
+```
+
+## Resources
+
+Some further resources:
+
+- **Theme components** (gallery): [ggplot2tutor.com/theme/](https://ggplot2tutor.com/theme/)
+
+- **Complete themes** (gallery): [r-charts.com/ggplot2/themes](https://r-charts.com/ggplot2/themes)
+
+- **Custom fonts** setup in R (guide): [yjunechoe.github.io/posts/2021-06-24-setting-up-and-debugging-custom-fonts/](https://yjunechoe.github.io/posts/2021-06-24-setting-up-and-debugging-custom-fonts/)
+
+- **Data visualization principles** w/ ggplot (guide): [cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/](https://cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/)
