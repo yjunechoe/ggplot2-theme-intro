@@ -498,7 +498,16 @@ bar_plot +
 
 ```{r}
 #| label: custom-theme-element
+#| eval: false
 ```
+
+```{r}
+#| label: custom-theme-element-seed
+bar_plot +
+  theme(axis.line.x = element_line_wiggle(color = "red", amount = 5, seed = 123L),
+        legend.background = element_rect_wiggle(color = "black", seed = 123L))
+```
+
 
 ## Resources
 
