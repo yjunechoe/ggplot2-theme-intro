@@ -4,8 +4,9 @@
 
 $font-family-sans-serif: "Crimson Text";
 $code-block-font-size: .65em;
+$slide-small-font-size: .8em;
 
-$link-color: #440033;
+$link-color: #9d117a;
 
 /*-- scss:rules --*/
 
@@ -18,7 +19,11 @@ $link-color: #440033;
 }
 
 li code {
-  font-size: .8em;
+  font-size: $slide-small-font-size;
+}
+
+.reveal .footer {
+  font-size: $slide-small-font-size;
 }
 
 .center {
