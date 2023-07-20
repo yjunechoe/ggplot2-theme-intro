@@ -1,7 +1,18 @@
 ---
 title: "Introduction to ggplot2 <code>theme()</code>"
+author: |
+  <p class="author" style="font-size: 1.1em; margin-top:60px">
+    June Choe
+  </p>
+  <p style="font-size:.9em">
+    University of Pennsylvania
+  </p>
+  <p style="font-size:.8em">
+    7/21/2023
+  </p>
 format:
   revealjs:
+    include-in-header: "meta.html"
     theme: [default, styles.scss]
     code-line-numbers: false
     code-link: true
@@ -500,3 +511,25 @@ Some further resources:
 - **Custom fonts** setup in R (guide): [yjunechoe.github.io/posts/2021-06-24-setting-up-and-debugging-custom-fonts/](https://yjunechoe.github.io/posts/2021-06-24-setting-up-and-debugging-custom-fonts/)
 
 - **Data visualization principles** w/ ggplot (guide): [cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/](https://cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/)
+
+<!-- misc -->
+
+```{r}
+#| label: meta
+#| include: false
+#| eval: false
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "A brief introduction to theme in ggplot2.",
+    generator = "quarto and reveal.js"
+  ) %>% 
+  meta_name("github-repo" = "yjunechoe/ggplot2-theme-intro") %>% 
+  meta_social(
+    title = "Introduction to ggplot2 theme()",
+    url = "https://yjunechoe.github.io/ggplot2-theme-intro",
+    og_type = "website",
+    og_author = "June Choe",
+    twitter_creator = "@yjunechoe"
+  )
+```
